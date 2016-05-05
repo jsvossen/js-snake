@@ -1,0 +1,26 @@
+@import "reset.css";
+
+
+#board {
+	width: 600px;
+	margin: auto;
+	border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+#board:after {
+	content: " ";
+	height: 0;
+	clear: both;
+	display: block;
+}
+
+.cell {
+	-webkit-box-sizing: border-box; 
+    -moz-box-sizing: border-box;   
+    box-sizing: border-box;
+    width: 2.5%;
+    height: 14px;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    float: left;
+}
