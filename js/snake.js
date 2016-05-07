@@ -14,7 +14,7 @@ var grid = {
 var snake = {
 	facing: "e",
 	body: [[19,19]],
-	speed: 1000,
+	speed: 200,
 	render: function() {
 		for (i=0; i<this.body.length; i++) {
 			var x = this.body[i][0];
@@ -24,27 +24,36 @@ var snake = {
 		}
 	},
 	move: function() {
+		console.log(this);
 		$('.snake').remove();
 		switch(this.facing) {
 			case "n":
-				for (i=0; i<this.body.length; i++) {
-					this.body[i][1]--;
-				};
+				if (this.body[0][1] > 0) {
+					for (i=0; i<this.body.length; i++) {
+						this.body[i][1]--;
+					};
+				}
 				break;
 			case "s":
-				for (i=0; i<this.body.length; i++) {
-					this.body[i][1]++;
-				};
+				if (this.body[0][1] < grid.height-1) {
+					for (i=0; i<this.body.length; i++) {
+						this.body[i][1]++;
+					};
+				}
 				break;
 			case "e":
-				for (i=0; i<this.body.length; i++) {
-					this.body[i][0]++;
-				};
+				if (this.body[0][0] < grid.width-1) {
+					for (i=0; i<this.body.length; i++) {
+						this.body[i][0]++;
+					};
+				}
 				break;
 			case "w":
-				for (i=0; i<this.body.length; i++) {
-					this.body[i][0]--;
-				};
+				if (this.body[0][0] > 0) {
+					for (i=0; i<this.body.length; i++) {
+						this.body[i][0]--;
+					};
+				}
 				break;
 		}
 		this.render();
@@ -73,3 +82,4 @@ $(document).keydown(function(event){
     event.preventDefault(); // prevent the default action (scroll / move caret)
 });
 
+var playTimer = setInterval(snake.move.bind(snake), snake.speed);
