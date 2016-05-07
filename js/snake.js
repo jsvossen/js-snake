@@ -1,3 +1,40 @@
+var snakeGame = {
+	init: function() {
+		grid.draw();
+		snake.render();
+		$(document).keydown(function(event){
+			switch(event.which) {
+		        case 37: // left
+		        	if (snake.facing != "e") { snake.facing = "w"; }
+		        	break;
+		        case 38: // up
+		        	if (snake.facing != "s") { snake.facing = "n"; }
+		        	break;
+
+		        case 39: // right
+		        	if (snake.facing != "w") { snake.facing = "e"; }
+		        	break;
+
+		        case 40: // down
+		        	if (snake.facing != "n") { snake.facing = "s"; }
+		        	break;
+
+		        default: return; // exit this handler for other keys
+		    }
+		    event.preventDefault(); // prevent the default action (scroll / move caret)
+		});
+	},
+	start: function() {
+		var playTimer = setInterval(function() {
+			if (snake.alive()) {
+				snake.move();
+			} else {
+				clearInterval(playTimer);
+			}
+		}, snake.speed);
+	}
+};
+
 var grid = {
 	width: 40,
 	height: 40,
@@ -55,33 +92,3 @@ var snake = {
 		return !( (head[0] < 0 || head[0] > grid.width-1) || (head[1] < 0 || head[0] > grid.height-1) || $('.cell[data-coord="'+head[0]+'-'+head[1]+'"]').children('.snake.tail').length>0 );
 	}
 };
-
-$(document).keydown(function(event){
-	switch(event.which) {
-        case 37: // left
-        	if (snake.facing != "e") { snake.facing = "w"; }
-        	break;
-        case 38: // up
-        	if (snake.facing != "s") { snake.facing = "n"; }
-        	break;
-
-        case 39: // right
-        	if (snake.facing != "w") { snake.facing = "e"; }
-        	break;
-
-        case 40: // down
-        	if (snake.facing != "n") { snake.facing = "s"; }
-        	break;
-
-        default: return; // exit this handler for other keys
-    }
-    event.preventDefault(); // prevent the default action (scroll / move caret)
-});
-
-var playTimer = setInterval(function() {
-	if (snake.alive()) {
-		snake.move();
-	} else {
-		clearInterval(playTimer);
-	}
-}, snake.speed);
