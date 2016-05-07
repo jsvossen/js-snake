@@ -28,24 +28,16 @@ var snake = {
 		var vacated = [head[0],head[1]]
 		switch(this.facing) {
 			case "n":
-				if (head[1] > 0) {
-					head[1]--;
-				}
+				head[1]--;
 				break;
 			case "s":
-				if (head[1] < grid.height-1) {
-					head[1]++;
-				}
+				head[1]++;
 				break;
 			case "e":
-				if (head[0] < grid.width-1) {
-					head[0]++;
-				}
+				head[0]++;
 				break;
 			case "w":
-				if (head[0] > 0) {
-					head[0]--;
-				}
+				head[0]--;
 				break;
 		}
 		for (i=1; i<this.body.length; i++) {
@@ -53,8 +45,14 @@ var snake = {
 			this.body[i] = vacated;
 			vacated = current;
 		}
-		$('.snake').remove();
-		this.render();
+		if (this.alive()) {
+			$('.snake').remove();
+			this.render();
+		}
+	},
+	alive: function() {
+		var head = this.body[0];
+		return !( (head[0] < 0 || head[0] > grid.width-1) || (head[1] < 0 || head[0] > grid.height-1) || $('.cell[data-coord="'+head[0]+'-'+head[1]+'"]').children('.snake.tail').length>0 );
 	}
 };
 
@@ -80,4 +78,10 @@ $(document).keydown(function(event){
     event.preventDefault(); // prevent the default action (scroll / move caret)
 });
 
-var playTimer = setInterval(snake.move.bind(snake), snake.speed);
+var playTimer = setInterval(function() {
+	if (snake.alive()) {
+		snake.move();
+	} else {
+		clearInterval(playTimer);
+	}
+}, snake.speed);
