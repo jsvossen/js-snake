@@ -11,15 +11,12 @@ var snakeGame = {
 		        case 38: // up
 		        	if (snake.facing != "s") { snake.facing = "n"; }
 		        	break;
-
 		        case 39: // right
 		        	if (snake.facing != "w") { snake.facing = "e"; }
 		        	break;
-
 		        case 40: // down
 		        	if (snake.facing != "n") { snake.facing = "s"; }
 		        	break;
-
 		        default: return; // exit this handler for other keys
 		    }
 		    event.preventDefault(); // prevent the default action (scroll / move caret)
@@ -29,6 +26,7 @@ var snakeGame = {
 		var playTimer = setInterval(function() {
 			if (snake.alive()) {
 				snake.move();
+				if ($('.cell .food').length == 0) { food.render(); }
 			} else {
 				clearInterval(playTimer);
 			}
@@ -82,10 +80,14 @@ var snake = {
 				head[0]--;
 				break;
 		}
-		for (i=1; i<this.body.length; i++) {
-			var current = [this.body[i][0],this.body[i][1]];
-			this.body[i] = vacated;
-			vacated = current;
+		if (grid.cellHas(head,'.food')>0) {
+			this.body.splice(1, 0, vacated);
+		} else {
+			for (i=1; i<this.body.length; i++) {
+				var current = [this.body[i][0],this.body[i][1]];
+				this.body[i] = vacated;
+				vacated = current;
+			}
 		}
 		if (this.alive()) {
 			$('.snake').remove();
@@ -101,13 +103,11 @@ var snake = {
 
 var food = {
 	render: function() {
-		if ($('.cell').children('.food').length == 0) {
-			var coord = this.randomCoord();
-			while (grid.cellHas(coord,$('.snake'))) {
-				coord = this.randomCoord();
-			}
-			grid.fillCell(coord,'<div class="food"></div>');
+		var coord = this.randomCoord();
+		while (grid.cellHas(coord,$('.snake'))) {
+			coord = this.randomCoord();
 		}
+		grid.fillCell(coord,'<div class="food"></div>');
 	},
 	randomCoord: function() {
 		var x = Math.floor((Math.random() * grid.width));
