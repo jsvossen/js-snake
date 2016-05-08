@@ -31,3 +31,9 @@
 	background: green;
 }
 .snake.head { background: darkgreen;}
+
+.food { 
+	height: 100%;
+	width: 100%;
+	background: red;
+}

@@ -2,6 +2,7 @@ var snakeGame = {
 	init: function() {
 		grid.draw();
 		snake.render();
+		food.render();
 		$(document).keydown(function(event){
 			switch(event.which) {
 		        case 37: // left
@@ -60,10 +61,8 @@ var snake = {
 	speed: 200,
 	render: function() {
 		for (i=0; i<this.body.length; i++) {
-			var x = this.body[i][0];
-			var y = this.body[i][1];
 			var segment = (i == 0) ? 'head' : 'tail';
-			grid.fillCell([x,y],'<div class="snake '+segment+'"></div>');
+			grid.fillCell(this.body[i],'<div class="snake '+segment+'"></div>');
 		}
 	},
 	move: function() {
@@ -96,5 +95,23 @@ var snake = {
 	alive: function() {
 		var head = this.body[0];
 		return !( (head[0] < 0 || head[0] > grid.width-1) || (head[1] < 0 || head[0] > grid.height-1) || grid.cellHas(head,'.snake.tail')>0 );
+	}
+};
+
+
+var food = {
+	render: function() {
+		if ($('.cell').children('.food').length == 0) {
+			var coord = this.randomCoord();
+			while (grid.cellHas(coord,$('.snake'))) {
+				coord = this.randomCoord();
+			}
+			grid.fillCell(coord,'<div class="food"></div>');
+		}
+	},
+	randomCoord: function() {
+		var x = Math.floor((Math.random() * grid.width));
+		var y = Math.floor((Math.random() * grid.height));
+		return [x,y];
 	}
 };
