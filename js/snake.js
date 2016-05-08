@@ -45,6 +45,12 @@ var grid = {
 				$(row).append('<div class="cell" data-coord="'+x+'-'+y+'"></div>');
 			}
 		}
+	},
+	cellHas: function(coord,childClass) {
+		return $('.cell[data-coord="'+coord[0]+'-'+coord[1]+'"]').children(childClass).length;
+	},
+	fillCell: function(coord,html) {
+		$('.cell[data-coord="'+coord[0]+'-'+coord[1]+'"]').html(html);
 	}
 };
 
@@ -57,7 +63,7 @@ var snake = {
 			var x = this.body[i][0];
 			var y = this.body[i][1];
 			var segment = (i == 0) ? 'head' : 'tail';
-			$('.cell[data-coord="'+x+'-'+y+'"]').html('<div class="snake '+segment+'"></div>');
+			grid.fillCell([x,y],'<div class="snake '+segment+'"></div>');
 		}
 	},
 	move: function() {
@@ -89,6 +95,6 @@ var snake = {
 	},
 	alive: function() {
 		var head = this.body[0];
-		return !( (head[0] < 0 || head[0] > grid.width-1) || (head[1] < 0 || head[0] > grid.height-1) || $('.cell[data-coord="'+head[0]+'-'+head[1]+'"]').children('.snake.tail').length>0 );
+		return !( (head[0] < 0 || head[0] > grid.width-1) || (head[1] < 0 || head[0] > grid.height-1) || grid.cellHas(head,'.snake.tail')>0 );
 	}
 };
