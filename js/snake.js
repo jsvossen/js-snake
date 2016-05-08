@@ -96,7 +96,7 @@ var snake = {
 	},
 	alive: function() {
 		var head = this.body[0];
-		return !( (head[0] < 0 || head[0] > grid.width-1) || (head[1] < 0 || head[0] > grid.height-1) || grid.cellHas(head,'.snake.tail')>0 );
+		return !( (head[0] < 0 || head[0] > grid.width-1) || (head[1] < 0 || head[1] > grid.height-1) || grid.cellHas(head,'.snake.tail')>0 );
 	}
 };
 
