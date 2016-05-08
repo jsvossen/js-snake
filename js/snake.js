@@ -3,7 +3,9 @@ var snakeGame = {
 		grid.draw();
 		snake.render();
 		food.render();
+		game = this;
 		$(document).keydown(function(event){
+			if (!game.inProgress) { game.start(); game.inProgress = true; }
 			switch(event.which) {
 		        case 37: // left
 		        	if (snake.facing != "e") { snake.facing = "w"; }
@@ -31,7 +33,8 @@ var snakeGame = {
 				clearInterval(playTimer);
 			}
 		}, snake.speed);
-	}
+	},
+	inProgress: false
 };
 
 var grid = {
@@ -56,7 +59,7 @@ var grid = {
 var snake = {
 	facing: "e",
 	body: [[19,19],[18,19],[17,19]],
-	speed: 200,
+	speed: 150,
 	render: function() {
 		for (i=0; i<this.body.length; i++) {
 			var segment = (i == 0) ? 'head' : 'tail';
