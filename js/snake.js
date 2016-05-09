@@ -23,6 +23,18 @@ var snakeGame = {
 		    }
 		    event.preventDefault(); // prevent the default action (scroll / move caret)
 		});
+		$('.reset a').click(function(event){
+			game.reset();
+			event.preventDefault();
+		});
+	},
+	reset: function() {
+		this.inProgress = false;
+		grid.clear();
+		$('header p').toggle();
+		snake.body = [[19,19],[18,19],[17,19]];
+		snake.render();
+		food.render();
 	},
 	start: function() {
 		var playTimer = setInterval(function() {
@@ -30,6 +42,7 @@ var snakeGame = {
 				snake.move();
 				if ($('.cell .food').length == 0) { food.render(); }
 			} else {
+				$('header p').toggle();
 				clearInterval(playTimer);
 			}
 		}, snake.speed);
@@ -53,6 +66,9 @@ var grid = {
 	},
 	fillCell: function(coord,html) {
 		$('.cell[data-coord="'+coord[0]+'-'+coord[1]+'"]').html(html);
+	},
+	clear: function() {
+		$('.cell').html('');
 	}
 };
 

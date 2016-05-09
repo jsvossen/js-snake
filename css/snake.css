@@ -2,9 +2,12 @@
 
 body { font-family: Helvetica, Arial, sans-serf; }
 
-header { text-align: center; margin: 20px;}
+header { text-align: center; margin: 20px; }
 
 h1 { font-size: 25px; margin-bottom: 10px; }
+
+.reset, .reset a { color: red;}
+.reset { display: none;}
 
 #board {
 	width: 525px;
@@ -12,7 +15,7 @@ h1 { font-size: 25px; margin-bottom: 10px; }
 	border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
 }
-#board:after {
+#board:after, #stats:after {
 	content: " ";
 	height: 0;
 	clear: both;
