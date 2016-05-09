@@ -1,4 +1,6 @@
 var snakeGame = {
+	score: 0,
+	inProgress: false,
 	init: function() {
 		grid.draw();
 		snake.render();
@@ -35,32 +37,54 @@ var snakeGame = {
 		snake.body = [[19,19],[18,19],[17,19]];
 		snake.render();
 		food.render();
+		timer.interval = 150;
 		$('header p').toggle();
 		this.updateStats();
 	},
 	start: function() {
+		timer.start();
+	},
+	gameLoop: function() {
 		game = this;
-		var playTimer = setInterval(function() {
-			if (snake.alive()) {
-				snake.move();
-				if ($('.cell .food').length == 0) { 
-					food.render();
-					game.score += (snake.body.length-3)*2;
-					game.updateStats();
-				}
-			} else {
-				$('header p').toggle();
-				clearInterval(playTimer);
+		if (snake.alive()) {
+			snake.move();
+			if ($('.cell .food').length == 0) { 
+				food.render();
+				game.score += (snake.body.length-3)*2;
+				game.updateStats();
+				if (timer.interval > 32) {timer.interval -= 2};
+				timer.stop();
+				timer.start();
 			}
-		}, snake.speed);
+		} else {
+			$('header p').toggle();
+			timer.stop();
+		}
 	},
 	updateStats: function() {
 		game = this;
 		$('.score span').text(game.score);
 		$('.size span').text(snake.body.length);
+	}
+};
+
+var timer = {
+	interval: 150,
+	enabled: false,
+	timerId: 0,
+	start: function() {
+		var thisTimer = this;
+		thisTimer.enabled = true;
+		if (thisTimer.enabled) {
+			thisTimer.timerId = setInterval(function(){
+				snakeGame.gameLoop();
+			}, thisTimer.interval);
+		}
 	},
-	score: 0,
-	inProgress: false
+	stop: function() {
+		this.enabled = false;
+		clearInterval(this.timerId);
+	}
 };
 
 var grid = {
@@ -88,7 +112,6 @@ var grid = {
 var snake = {
 	facing: "e",
 	body: [[19,19],[18,19],[17,19]],
-	speed: 150,
 	render: function() {
 		for (i=0; i<this.body.length; i++) {
 			var segment = (i == 0) ? 'head' : 'tail';
