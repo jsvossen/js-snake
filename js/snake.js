@@ -30,23 +30,36 @@ var snakeGame = {
 	},
 	reset: function() {
 		this.inProgress = false;
+		this.score = 0;
 		grid.clear();
-		$('header p').toggle();
 		snake.body = [[19,19],[18,19],[17,19]];
 		snake.render();
 		food.render();
+		$('header p').toggle();
+		this.updateStats();
 	},
 	start: function() {
+		game = this;
 		var playTimer = setInterval(function() {
 			if (snake.alive()) {
 				snake.move();
-				if ($('.cell .food').length == 0) { food.render(); }
+				if ($('.cell .food').length == 0) { 
+					food.render();
+					game.score += (snake.body.length-3)*2;
+					game.updateStats();
+				}
 			} else {
 				$('header p').toggle();
 				clearInterval(playTimer);
 			}
 		}, snake.speed);
 	},
+	updateStats: function() {
+		game = this;
+		$('.score span').text(game.score);
+		$('.size span').text(snake.body.length);
+	},
+	score: 0,
 	inProgress: false
 };
 

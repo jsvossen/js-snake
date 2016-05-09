@@ -9,6 +9,10 @@ h1 { font-size: 25px; margin-bottom: 10px; }
 .reset, .reset a { color: red;}
 .reset { display: none;}
 
+#stats { width: 525px; margin: 10px auto;}
+.size { float: right; }
+.score { float: left; }
+
 #board {
 	width: 525px;
 	margin: auto;
